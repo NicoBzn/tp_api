@@ -5,40 +5,40 @@ import 'package:tp_api/views/main_screen.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:tp_api/main.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatelessWidget { //création de la class
 
   Future<String?> _authUser(LoginData data) async {
-    print('Attempting authentication for: ${data.name}'); // Ajout pour le débogage
+    print('Attempting authentication for: ${data.name}');//debug pour vérifier que
 
-    final response = await supabase
+    final response = await supabase //requete supabase
         .from('account')
         .select('name, password')
         .eq('name', data.name);
 
-    for (var row in response) {
+    for (var row in response) { //verification du nom d'utilisateur et du mot de passe
       String? name = row['name'];
       String? password = row['password'];
       if (name == data.name && password == data.password) {
         // Authentication successful
-        print('Authentication successful for: ${data.name}'); // Ajout pour le débogage
+        print('Authentication successful for: ${data.name}');//debug
         return null;
       }
     }
-    print('Authentication failed for: ${data.name}'); // Ajout pour le débogage
+    print('Authentication failed for: ${data.name}');//debug
     return "Invalid username or password";
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {//fenetre graphique
     return FlutterLogin(
-      title: 'Mon App',
-      logo: 'assets/Logo.png', // Chemin vers votre image
+      title: 'Search Appli',
+      logo: 'assets/Logo.png',
       theme: LoginTheme(
-        primaryColor: Colors.blue, // Couleur principale de l'écran de connexion
-        accentColor: Colors.white, // Couleur d'accentuation
-        errorColor: Colors.red, // Couleur des erreurs
+        primaryColor: Colors.blue,
+        accentColor: Colors.white,
+        errorColor: Colors.red,
         titleStyle: TextStyle(
-          color: Colors.black, // Couleur du titre
+          color: Colors.black,
         ),
       ),
       onLogin: _authUser,
@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
         return null;
       },
       onSubmitAnimationCompleted: () {
-        print('Login successful'); // Ajout pour le débogage
+        print('Login successful'); //debug
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => MainScreen(),
         ));
@@ -85,9 +85,8 @@ class LoginScreen extends StatelessWidget {
 
   Future<String?> _createUser(SignupData data) async {
     try {
-      print('Creating user: ${data.name}'); // Ajout pour le débogage
+      print('Creating user: ${data.name}'); //debug
 
-      // Assuming you have a 'account' table in your Supabase database
       final response = await supabase.from('account').insert([
         {
           'name': data.name,
@@ -96,24 +95,20 @@ class LoginScreen extends StatelessWidget {
       ]);
 
       if (response.error != null) {
-        // If there's an error while inserting
-        print('User creation failed: ${response.error!.message}'); // Ajout pour le débogage
+        print('User creation failed: ${response.error!.message}'); //debug
         return response.error!.message;
       } else {
-        // User creation successful
-        print('User created successfully: ${data.name}'); // Ajout pour le débogage
+        print('User created successfully: ${data.name}'); //debug
         return null;
       }
     } catch (error) {
-      // If there's any unexpected error
-      print('Error creating user: $error'); // Ajout pour le débogage
+      print('Error creating user: $error'); //debug
       return "An error occurred while creating the user: $error";
     }
   }
 
   Future<String?> _recoverPassword(String name) {
-    // Logique pour la récupération du mot de passe
-    print('Password recovery request for: $name'); // Ajout pour le débogage
+    print('Password recovery request for: $name'); //debug
     return Future.value('');
   }
 }
